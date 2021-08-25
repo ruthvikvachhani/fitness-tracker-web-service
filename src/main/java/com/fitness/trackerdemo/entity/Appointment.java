@@ -1,4 +1,4 @@
-package com.fitness.trackerdemo;
+package com.fitness.trackerdemo.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
