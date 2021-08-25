@@ -1,9 +1,13 @@
 package com.fitness.trackerdemo.controller;
 
+import java.security.InvalidParameterException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.trackerdemo.entity.Appointment;
+import com.fitness.trackerdemo.exception.AppointmentNotFoundException;
 import com.fitness.trackerdemo.service.AppointmentService;
 
 @RestController
@@ -30,6 +35,16 @@ public class AppointmentController {
 		return appointmentService.getUser(id);
 	}
 
+	@ExceptionHandler(value = { AppointmentNotFoundException.class, IllegalStateException.class })
+	public ResponseEntity<Appointment> exception(AppointmentNotFoundException appointmentNotFoundException) {
+		return new ResponseEntity<Appointment>(HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(value = { InvalidParameterException.class, IllegalArgumentException.class })
+	public ResponseEntity<Appointment> exception(InvalidParameterException invalidParameterException) {
+		return new ResponseEntity<Appointment>(HttpStatus.BAD_REQUEST);
+	}
+
 	@PostMapping("/appointment")
 	private void saveAppointment(@RequestBody Appointment appointment) {
 
@@ -38,13 +53,13 @@ public class AppointmentController {
 	}
 
 	@DeleteMapping("/appointment/{id}")
-	private void deleteAppointment(@PathVariable("id") Integer id) 
-	{
+	private void deleteAppointment(@PathVariable("id") Integer id) {
 		appointmentService.delete(id);
 	}
+
 	@PutMapping("/appointment/{id}")
-	private void updateUser(@RequestBody Appointment appointment,@PathVariable("id") Integer id ) {
-		appointmentService.update(appointment,id);
-		System.out.println(appointment.getName());
+	private void updateUser(@RequestBody Appointment appointment, @PathVariable("id") Integer id) {
+		appointmentService.update(appointment, id);
 	}
+
 }
