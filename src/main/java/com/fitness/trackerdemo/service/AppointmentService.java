@@ -18,7 +18,7 @@ public class AppointmentService implements IAppointmentService {
 
 	@Override
 	public void save(Appointment appointment) {
-		if(appointment.getName().isEmpty() || appointment.getPhone()<1000000000 || appointment.getEmail().isEmpty() || appointment.getPackage_choose().isEmpty() || appointment.getTrainerPref()!= 'M' || appointment.getTrainerPref()!= 'F')
+		if(appointment.getName().isEmpty() || appointment.getPhone()<1000000000 || appointment.getEmail().isEmpty() || appointment.getPackage_choose().isEmpty() )
 			throw new InvalidParameterException("Please Provide Your Name");
 		else
 			appointmentRepository.save(appointment);
